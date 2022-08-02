@@ -3,7 +3,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
     useNewUrlParser: true,
 
 })
-
+const hamza = 'name'
 
 /* const 
 const user = new User({
