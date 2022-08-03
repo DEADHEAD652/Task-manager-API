@@ -1,14 +1,33 @@
-const promise = new Promise((resolve , reject) => { 
-setTimeout( () => { 
-    resolve([12,3,4])
-} , 1000)
+const add = (a, b) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
 
 
+            resolve(a + b)
+        }, 2000)
 
-})
+    })
 
-promise.then((result) => {
-    console.log("Success" , result)
+
+}
+
+/*add(1, 8).then((result) => {
+    console.log(result)
+    add(result, 6).then((result1) => {
+        console.log(result1)
+    }).catch((error) => {
+        console.log(error)
+    })
 }).catch((error) => {
-    console.log("error",error)
+    console.log(error)
+
+})*/
+add(2, 2).then((result) => {
+    console.log(result)
+    return add(result, 5)
+
+}).then((result1) => {
+    console.log(result1)
+}).catch((e) => {
+    console.log(e)
 })
