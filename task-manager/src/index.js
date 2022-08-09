@@ -4,17 +4,15 @@ require('./db/mongoose.js')
 const userRouter = require('./routers/user')
 const taskRouter = require('./routers/task')
 const app = express()
-const port = process.env.port || 3000 
+const port = process.env.port || 3000
 
 app.use(express.json())
 app.use(userRouter)
 app.use(taskRouter)
- 
+
 
 app.listen(port, () => {
     console.log('server is on port ' + port)
-}) 
-const myFunction = async () => {
+})
 
-}
-myFunction()
+const bcrypt = require('bcrypt')
