@@ -9,9 +9,11 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: true,
         trim: true,
         lowercase: true,
+
         validate(value) {
             if (!validator.isEmail(value)) {
                 throw new Error('Email is invalid')
@@ -47,7 +49,12 @@ userSchema.statics.findByCredentials = async (email, password) => {
     if (!user) {
         throw new Error('Unable to login')
     }
-    const isMatch = await bcypt.compare(password, user.password)
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch) {
+
+        throw new Error('Unable to Login!')
+    }
+    return user
 }
 
 
