@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 
-const TaskSchema = mongoose.Schema({
+const TaskSchema = new mongoose.Schema({
     description: {
         trim: true,
         required: true,
@@ -12,7 +12,7 @@ const TaskSchema = mongoose.Schema({
     IsDone: {
 
         type: Boolean,
-        defualt: false
+        default:false
 
 
     },

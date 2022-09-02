@@ -17,9 +17,19 @@ router.post('/tasks', auth, async (req, res) => {
     }
 })
 
+// GET /tasks?IsDone=true
 router.get('/tasks', auth, async (req, res) => {
+    const match = {}
+
+    if (req.query.IsDone) {
+        match.IsDone = req.query.IsDone === 'true'
+    }
+
     try {
-        await req.user.populate('tasks').execPopulate()
+        await req.user.populate({
+            path: 'tasks',
+            match
+        }).execPopulate()
         res.send(req.user.tasks)
     } catch (e) {
         res.status(500).send()
@@ -44,7 +54,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
 
 router.patch('/tasks/:id', auth, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['description', 'completed']
+    const allowedUpdates = ['description', 'IsDone']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
