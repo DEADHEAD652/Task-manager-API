@@ -1,7 +1,8 @@
 const express = require('express')
+const multer = require('multer')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
-const multer = require('multer')
+
 const router = new express.Router()
 
 router.post('/users', async (req, res) => {
@@ -10,7 +11,10 @@ router.post('/users', async (req, res) => {
     try {
         await user.save()
         const token = await user.generateAuthToken()
-        res.status(201).send({ user, token })
+        res.status(201).send({
+            user,
+            token
+        })
     } catch (e) {
         res.status(400).send(e)
     }
@@ -20,7 +24,10 @@ router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
-        res.send({ user, token })
+        res.send({
+            user,
+            token
+        })
     } catch (e) {
         res.status(400).send()
     }
@@ -59,7 +66,9 @@ router.patch('/users/me', auth, async (req, res) => {
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
-        return res.status(400).send({ error: 'Invalid updates!' })
+        return res.status(400).send({
+            error: 'Invalid updates!'
+        })
     }
 
     try {
@@ -80,11 +89,24 @@ router.delete('/users/me', auth, async (req, res) => {
     }
 })
 const upload = multer({
-    dest: 'avatars'
+    dest: 'avatars',
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error( "upload jpg jpeg png files"))
+        }
+        cb(undefined, cb)
+
+    }
 })
 
-router.post('/users/me/avatar',upload.single('avatar'),(req,res) => {
+router.post('/users/me/avatar', upload.single('upload'), (req, res) => {
     res.send()
 })
+
+
+router.post('')
 
 module.exports = router
