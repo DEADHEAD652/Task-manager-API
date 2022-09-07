@@ -102,11 +102,17 @@ const upload = multer({
     }
 })
 
-router.post('/users/me/avatar', upload.single('upload'), (req, res) => {
+
+const errorMiddleware = (req,res,next) => {
+    throw new Error('Please upload jpg jpeg png files')
+
+}
+
+router.post('/users/me/avatar',errorMiddleware, (req, res) => {
     res.send()
-})
+}, (error,req,res,next) => {res.status(400).send({error: error.message})})
 
 
-router.post('')
+
 
 module.exports = router
