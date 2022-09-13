@@ -1,7 +1,7 @@
 const sgMail = require('@sendgrid/mail')
 const { CancellationToken } = require('mongodb')
-const sendgridApiKey = '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'
-sgMail.setApiKey(sendgridApiKey)
+
+sgMail.setApiKey(process.env.SEND_Grid_API)
 
 const WelcomeEmail = (email, name) => {
     sgMail.send({
